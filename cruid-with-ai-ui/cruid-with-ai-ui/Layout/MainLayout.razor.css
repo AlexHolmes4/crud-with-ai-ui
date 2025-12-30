@@ -1,0 +1,37 @@
+﻿.app-separator {
+    width: 1px;
+    height: 1.5rem;
+    background-color: var(--bs-border-color);
+}
+
+.app-header {
+    color: var(--bs-white);
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background-color: rgb(var(--bs-blue-900-rgb));
+}
+
+    .app-header .nav-btn {
+        color: var(--bs-white);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        text-decoration: none;
+        background-color: transparent;
+        border-radius: 999px; /* pill shape */
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+        .app-header .nav-btn:hover,
+        .app-header .nav-btn:focus {
+            text-decoration: none;
+            background-color: rgba(255,255,255,0.04);
+        }
+
+        .app-header .nav-btn.active {
+            background-color: rgba(var(--mui-bluegray-500-rgb), 0.2);
+            border-color: rgba(var(--mui-bluegray-500-rgb), 0.5);
+            box-shadow: none;
+        }
