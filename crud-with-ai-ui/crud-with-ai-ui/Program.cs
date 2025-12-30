@@ -1,4 +1,4 @@
-using cruid_with_ai_ui;
+using crud_with_ai_ui;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
