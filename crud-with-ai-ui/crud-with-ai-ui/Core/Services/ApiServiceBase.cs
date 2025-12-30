@@ -4,11 +4,11 @@ using System.Text.Json;
 using crud_with_ai_ui.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace crud_with_ai_ui.Services.Api;
+namespace Core.Services;
 
 public abstract class ApiServiceBase
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
 
@@ -31,7 +31,7 @@ public abstract class ApiServiceBase
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var payload = await response.Content.ReadFromJsonAsync<T>(JsonOptions, cancellationToken);
+                    var payload = await response.Content.ReadFromJsonAsync<T>(_jsonOptions, cancellationToken);
                     if (payload is null)
                     {
                         return ApiResponse<T>.Failure(response.StatusCode, null, "Empty response payload.");
@@ -88,13 +88,13 @@ public abstract class ApiServiceBase
 
             try
             {
-                var validationDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(payload, JsonOptions);
+                var validationDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(payload, _jsonOptions);
                 if (validationDetails is not null && validationDetails.Errors.Count > 0)
                 {
                     return validationDetails;
                 }
 
-                return JsonSerializer.Deserialize<ProblemDetails>(payload, JsonOptions);
+                return JsonSerializer.Deserialize<ProblemDetails>(payload, _jsonOptions);
             }
             catch (JsonException)
             {

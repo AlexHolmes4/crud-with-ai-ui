@@ -1,6 +1,8 @@
+using Core.Services;
 using crud_with_ai_ui;
-using crud_with_ai_ui.Services.Api;
-using crud_with_ai_ui.Services.PageServices;
+using crud_with_ai_ui.Features.Chat.Services;
+using crud_with_ai_ui.Features.Products.ProductDetail.Services;
+using crud_with_ai_ui.Features.Products.ProductList.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Options;

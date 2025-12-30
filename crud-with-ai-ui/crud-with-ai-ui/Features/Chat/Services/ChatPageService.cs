@@ -1,8 +1,8 @@
+using Core.Services;
 using crud_with_ai_ui.Models;
-using crud_with_ai_ui.Services.Api;
 using Microsoft.AspNetCore.Mvc;
 
-namespace crud_with_ai_ui.Services.PageServices;
+namespace crud_with_ai_ui.Features.Chat.Services;
 
 public sealed class ChatPageService
 {

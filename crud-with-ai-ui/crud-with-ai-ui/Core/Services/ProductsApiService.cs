@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using crud_with_ai_ui.Models;
 
-namespace crud_with_ai_ui.Services.Api;
+namespace Core.Services;
 
 public sealed class ProductsApiService : ApiServiceBase
 {

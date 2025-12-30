@@ -1,18 +1,18 @@
+using Core.Services;
 using crud_with_ai_ui.Models;
-using crud_with_ai_ui.Services.Api;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 
-namespace crud_with_ai_ui.Services.PageServices;
+namespace crud_with_ai_ui.Features.Products.ProductList.Services;
 
 public sealed class ProductsPageService
 {
     private readonly ProductsApiService _apiService;
     private readonly NavigationManager _navigation;
-    public ProductsPageService(ProductsApiService apiService, NavigationManager Navigation)
+    public ProductsPageService(ProductsApiService apiService, NavigationManager navigation)
     {
         _apiService = apiService;
-        _navigation = Navigation;
+        _navigation = navigation;
     }
 
     public IReadOnlyList<Product> Products { get; private set; } = Array.Empty<Product>();

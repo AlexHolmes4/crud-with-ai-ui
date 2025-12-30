@@ -1,8 +1,8 @@
-using crud_with_ai_ui.Models;
-using crud_with_ai_ui.Services.Api;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using crud_with_ai_ui.Models;
 
-namespace crud_with_ai_ui.Services.PageServices;
+namespace crud_with_ai_ui.Features.Products.ProductDetail.Services;
 
 public sealed class ProductDetailsPageService
 {

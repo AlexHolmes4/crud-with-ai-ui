@@ -1,4 +1,4 @@
-namespace crud_with_ai_ui.Services.Api;
+namespace Core.Services;
 
 public sealed class ApiClientOptions
 {
