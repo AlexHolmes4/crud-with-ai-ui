@@ -1,0 +1,51 @@
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="input-group">
+            <InputText class="form-control" @ref="_inputTextRef" @bind-Value="_message" placeholder="Type your message..." disabled="@_isLoading" />
+            <button class="btn btn-primary" type="button" disabled="@IsSendDisabled" @onclick="HandleSubmit">@(_isLoading? "Sending..." : "Send")</button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public EventCallback<string> OnSend { get; set; }
+
+    [Parameter, EditorRequired]
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set => _isLoading = value;
+    }
+
+    private bool _isLoading;
+    private string _message = string.Empty;
+    private InputText? _inputTextRef;
+
+    private bool IsSendDisabled => _isLoading || string.IsNullOrWhiteSpace(_message);
+
+    private async Task HandleSubmit()
+    {
+        if (IsSendDisabled)
+        {
+            return;
+        }
+
+        var message = _message.Trim();
+        _message = string.Empty;
+
+        await OnSend.InvokeAsync(message);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_inputTextRef?.Element is not null)
+            {
+                await _inputTextRef.Element.Value.FocusAsync();
+            }
+        }
+    }
+}

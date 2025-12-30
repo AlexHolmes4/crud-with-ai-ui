@@ -1,0 +1,15 @@
+﻿.chat-message {
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--bs-light-bg-subtle);
+}
+
+.chat-message-user {
+    align-self: flex-end;
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+.chat-message-assistant {
+    align-self: flex-start;
+    background-color: rgba(var(--bs-secondary-rgb), 0.08);
+}

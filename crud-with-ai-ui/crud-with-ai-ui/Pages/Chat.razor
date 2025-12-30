@@ -6,7 +6,7 @@
 
 <PageTitle>Chat</PageTitle>
 
-<div class="d-flex align-items-center justify-content-between mb-3 test">
+<div class="d-flex align-items-center justify-content-between mb-3">
     <h1 class="h3 mb-0">Chat</h1>
     @if (PageService.IsLoading)
     {
@@ -14,16 +14,17 @@
     }
 </div>
 
-@* @if (PageService.Error is not null)
+@if (PageService.Error is not null)
 {
     <div class="alert alert-danger" role="alert">
         @PageService.Error.GetDisplayMessage()
     </div>
-} *@
+}
 
 <div class="card shadow-sm">
-    <div class="card-body">
-        <p class="text-muted mb-0">Chat UI goes here.</p>
+     <div class="card-body d-flex flex-column gap-3">
+        <ChatMessages Messages="PageService.Messages" />
+        <ChatInput OnSend="HandleSendAsync" IsLoading="PageService.IsLoading" />
     </div>
 </div>
 
@@ -36,4 +37,7 @@
             Navigation.NavigateTo("/chat", replace: true);
         }
     }
+
+    private Task HandleSendAsync(string message)
+        => PageService.SendMessageAsync(message);
 }

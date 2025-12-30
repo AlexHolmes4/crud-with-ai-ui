@@ -1,0 +1,35 @@
+@if (Product is not null)
+{
+    <div class="card shadow-sm">
+        <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
+            <div class="flex-grow-1">
+                <div class="fw-semibold">@Product.Name</div>
+                <div class="text-muted small">@GetSku(Product)</div>
+                @if (!string.IsNullOrWhiteSpace(Product.Description))
+                {
+                    <div class="small mt-2">@Product.Description</div>
+                }
+            </div>
+            <div class="text-md-end">
+                <div class="fw-semibold">@Product.Price.ToString("C")</div>
+                <button class="btn btn-outline-primary btn-sm mt-2" type="button" @onclick="HandleSelect">
+                    View details
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Product? Product { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnSelect { get; set; }
+
+    private Task HandleSelect()
+        => Product is null ? Task.CompletedTask : OnSelect.InvokeAsync(Product.Id);
+
+    private static string GetSku(Product product)
+        => string.IsNullOrWhiteSpace(product.Sku) ? "SKU not set" : $"SKU: {product.Sku}";
+}

@@ -1,0 +1,21 @@
+@if (Products is null || Products.Count == 0)
+{
+    <p class="text-muted mb-0">No products found.</p>
+}
+else
+{
+    <div class="d-flex flex-column gap-3">
+        @foreach (var product in Products)
+        {
+            <ProductCard Product="product" OnSelect="OnSelected" />
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<Product>? Products { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnSelected { get; set; }
+}

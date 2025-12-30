@@ -1,5 +1,6 @@
 using crud_with_ai_ui.Models;
 using crud_with_ai_ui.Services.Api;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace crud_with_ai_ui.Services.PageServices;
@@ -7,10 +8,11 @@ namespace crud_with_ai_ui.Services.PageServices;
 public sealed class ProductsPageService
 {
     private readonly ProductsApiService _apiService;
-
-    public ProductsPageService(ProductsApiService apiService)
+    private readonly NavigationManager _navigation;
+    public ProductsPageService(ProductsApiService apiService, NavigationManager Navigation)
     {
         _apiService = apiService;
+        _navigation = Navigation;
     }
 
     public IReadOnlyList<Product> Products { get; private set; } = Array.Empty<Product>();
@@ -33,5 +35,10 @@ public sealed class ProductsPageService
         }
 
         IsLoading = false;
+    }
+
+    public async Task NavigateToProductAsync(int productId, CancellationToken cancellationToken = default)
+    {
+        _navigation.NavigateTo($"/product/{productId}");
     }
 }

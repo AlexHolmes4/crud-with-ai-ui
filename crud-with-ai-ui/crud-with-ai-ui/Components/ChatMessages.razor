@@ -1,0 +1,26 @@
+@if (Messages is null || Messages.Count == 0)
+{
+    <p class="text-muted mb-0">Start the conversation by sending a prompt.</p>
+}
+else
+{
+    <div class="d-flex flex-column gap-2">
+        @foreach (var message in Messages)
+        {
+            <div class="chat-message @(GetMessageClass(message))">
+                <div class="small text-uppercase text-muted">@message.Role</div>
+                <div>@message.Content</div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<ChatMessage>? Messages { get; set; }
+
+    private static string GetMessageClass(ChatMessage message)
+        => message.Role.Equals("user", StringComparison.OrdinalIgnoreCase)
+            ? "chat-message-user"
+            : "chat-message-assistant";
+}
