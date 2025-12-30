@@ -1,0 +1,26 @@
+@page "/products"
+
+@inject ProductsPageService PageService
+
+<PageTitle>Products</PageTitle>
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Products</h1>
+    @if (PageService.IsLoading)
+    {
+        <span class="badge text-bg-secondary">Loading...</span>
+    }
+</div>
+@* 
+@if (PageService.Error is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        @PageService.Error.GetDisplayMessage()
+    </div>
+} *@
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <p class="text-muted mb-0">Product list UI goes here.</p>
+    </div>
+</div>

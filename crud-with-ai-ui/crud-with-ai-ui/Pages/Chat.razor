@@ -1,0 +1,39 @@
+@page "/"
+@page "/chat"
+
+@inject ChatPageService PageService
+@inject NavigationManager Navigation
+
+<PageTitle>Chat</PageTitle>
+
+<div class="d-flex align-items-center justify-content-between mb-3 test">
+    <h1 class="h3 mb-0">Chat</h1>
+    @if (PageService.IsLoading)
+    {
+        <span class="badge text-bg-secondary">Sending...</span>
+    }
+</div>
+
+@* @if (PageService.Error is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        @PageService.Error.GetDisplayMessage()
+    </div>
+} *@
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <p class="text-muted mb-0">Chat UI goes here.</p>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
+        if (string.IsNullOrEmpty(relativePath))
+        {
+            Navigation.NavigateTo("/chat", replace: true);
+        }
+    }
+}
