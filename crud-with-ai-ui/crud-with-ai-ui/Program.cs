@@ -12,7 +12,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOptions<ApiClientOptions>()
-    .Bind(builder.Configuration.GetSection(ApiClientOptions.SectionName));
+    .Bind(builder.Configuration.GetSection("ApiClientOptions"));
 
 builder.Services.AddHttpClient<ConversationsApiService>((sp, client) =>
 {
