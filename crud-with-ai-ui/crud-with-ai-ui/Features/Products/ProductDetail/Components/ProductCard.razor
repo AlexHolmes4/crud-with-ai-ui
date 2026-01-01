@@ -22,7 +22,7 @@
 
 @code {
     [Parameter]
-    public Product? Product { get; set; }
+    public ProductResponse? Product { get; set; }
 
     [Parameter]
     public EventCallback<int> OnSelect { get; set; }
@@ -30,6 +30,6 @@
     private Task HandleSelect()
         => Product is null ? Task.CompletedTask : OnSelect.InvokeAsync(Product.Id);
 
-    private static string GetSku(Product product)
+    private static string GetSku(ProductResponse product)
         => string.IsNullOrWhiteSpace(product.Sku) ? "SKU not set" : $"SKU: {product.Sku}";
 }

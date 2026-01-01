@@ -1,6 +1,6 @@
-namespace crud_with_ai_ui.Models;
+namespace crud_with_ai_ui.Models.Responses;
 
-public sealed record Product
+public sealed record ProductResponse
 {
     public int Id { get; init; }
     public string Name { get; init; } = string.Empty;

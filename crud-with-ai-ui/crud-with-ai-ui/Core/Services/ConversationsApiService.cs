@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
-using crud_with_ai_ui.Models;
+using crud_with_ai_ui.Models.Requests;
+using crud_with_ai_ui.Models.Responses;
 
 namespace Core.Services;
 

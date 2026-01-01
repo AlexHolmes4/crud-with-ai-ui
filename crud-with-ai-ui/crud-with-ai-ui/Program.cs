@@ -1,3 +1,4 @@
+using Blazored.Toast;
 using Core.Services;
 using crud_with_ai_ui;
 using crud_with_ai_ui.Features.Chat.Services;
@@ -13,6 +14,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOptions<ApiClientOptions>()
     .Bind(builder.Configuration.GetSection("ApiClientOptions"));
+
+builder.Services.AddBlazoredToast();
 
 builder.Services.AddHttpClient<ConversationsApiService>((sp, client) =>
 {

@@ -1,3 +1,6 @@
+@using crud_with_ai_ui.Extensions
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
 
 @if (Messages is null || Messages.Count == 0)
 {
@@ -5,12 +8,63 @@
 }
 else
 {
-    <div class="d-flex flex-column gap-2">
+    <div @ref="messagesContainer" class="message-container d-flex flex-column gap-2">
         @foreach (var message in Messages)
         {
             <div class="chat-message @(GetMessageClass(message))">
                 <div class="small text-uppercase text-muted">@message.Role</div>
-                <div class="message-text">@message.Content</div>
+                <div class="message-text">@((MarkupString)MarkdownExtensions.ConvertToHtml(message.Content))</div>
+
+                @if (ShouldShowActionButtons(message))
+                {
+                    <div class="action-buttons mt-2">
+                        @if (message.ProcessedAction == ProcessedActionType.FindProduct && message.AffectedProduct is not null)
+                        {
+                            <button class="btn btn-sm btn-primary" @onclick="() => NavigateToProduct(message.AffectedProduct.Id)">
+                                <span class="oi oi-eye"></span>
+                                View Product
+                            </button>
+                        }
+                        @if (message.ProcessedAction == ProcessedActionType.ListProducts)
+                        {
+                            <button class="btn btn-sm btn-outline-primary" @onclick="NavigateToProductList">
+                                <span class="oi oi-list"></span>
+                                Go to Products
+                            </button>
+                        }
+                        @if (message.ProcessedAction == ProcessedActionType.CreateProduct && message.AffectedProduct is not null)
+                        {
+                            <button class="btn btn-sm btn-success" @onclick="() => NavigateToProduct(message.AffectedProduct.Id)">
+                                <span class="oi oi-eye"></span>
+                                View Created Product
+                            </button>
+                        }
+                        @if (message.ProcessedAction == ProcessedActionType.UpdateProduct && message.AffectedProduct is not null)
+                        {
+                            <button class="btn btn-sm btn-info" @onclick="() => NavigateToProduct(message.AffectedProduct.Id)">
+                                <span class="oi oi-pencil"></span>
+                                View Updated Product
+                            </button>
+                        }
+                        @if (message.ProcessedAction == ProcessedActionType.DeleteProduct)
+                        {
+                            <button class="btn btn-sm btn-outline-primary" @onclick="NavigateToProductList">
+                                <span class="oi oi-list"></span>
+                                Back to Products
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        @if (IsLoading)
+        {
+            <div class="chat-message chat-message-assistant">
+                <div class="small text-uppercase text-muted">assistant</div>
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
         }
     </div>
@@ -18,10 +72,46 @@ else
 
 @code {
     [Parameter]
-    public IReadOnlyList<ChatMessage>? Messages { get; set; }
+    public IReadOnlyList<ChatMessageResponse>? Messages { get; set; }
 
-    private static string GetMessageClass(ChatMessage message)
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    private ElementReference messagesContainer;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (messagesContainer.Context != null)
+        {
+            await JS.InvokeVoidAsync("scrollToBottom", messagesContainer);
+        }
+    }
+
+    private bool ShouldShowActionButtons(ChatMessageResponse message)
+    {
+        return message.ProcessedAction switch
+        {
+            ProcessedActionType.FindProduct => message.AffectedProduct is not null,
+            ProcessedActionType.ListProducts => true,
+            ProcessedActionType.CreateProduct => message.AffectedProduct is not null,
+            ProcessedActionType.UpdateProduct => message.AffectedProduct is not null,
+            ProcessedActionType.DeleteProduct => true,
+            _ => false
+        };
+    }
+
+    private static string GetMessageClass(ChatMessageResponse message)
         => message.Role.Equals("user", StringComparison.OrdinalIgnoreCase)
             ? "chat-message-user"
             : "chat-message-assistant";
+
+    private void NavigateToProduct(int productId)
+    {
+        Navigation.NavigateTo($"/products/{productId}");
+    }
+
+    private void NavigateToProductList()
+    {
+        Navigation.NavigateTo("/products");
+    }
 }

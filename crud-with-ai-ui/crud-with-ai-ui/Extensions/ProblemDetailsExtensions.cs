@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace crud_with_ai_ui.Models;
+namespace crud_with_ai_ui.Extensions;
 
 public static class ProblemDetailsExtensions
 {

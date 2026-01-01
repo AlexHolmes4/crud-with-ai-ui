@@ -1,7 +1,7 @@
 using Core.Services;
-using crud_with_ai_ui.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using crud_with_ai_ui.Models.Responses;
 
 namespace crud_with_ai_ui.Features.Products.ProductList.Services;
 
@@ -15,7 +15,7 @@ public sealed class ProductsPageService
         _navigation = navigation;
     }
 
-    public IReadOnlyList<Product> Products { get; private set; } = Array.Empty<Product>();
+    public IReadOnlyList<ProductResponse> Products { get; private set; } = Array.Empty<ProductResponse>();
     public bool IsLoading { get; private set; }
     public ProblemDetails? Error { get; private set; }
 

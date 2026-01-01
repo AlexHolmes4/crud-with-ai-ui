@@ -8,9 +8,11 @@
 
 <div class="d-flex align-items-center justify-content-between mb-3">
     <h1 class="h3 mb-0">Chat</h1>
-    @if (PageService.IsLoading)
+    @if (PageService.IsShowingSpinner)
     {
-        <span class="badge text-bg-secondary">Sending...</span>
+        <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     }
 </div>
 
@@ -22,13 +24,14 @@
 }
 
 <div class="card shadow-sm">
-     <div class="card-body d-flex flex-column gap-3">
-        <ChatMessages Messages="PageService.Messages" />
-        <ChatInput OnSend="HandleSendAsync" IsLoading="PageService.IsLoading" />
+    <div class="card-body d-flex flex-column gap-3">
+        <ChatMessages Messages="PageService.Messages" IsLoading="PageService.IsLoading" />
+        <ChatInput OnSend="HandleSendAsync" OnClear="HandleClearAsync" IsLoading="PageService.IsLoading" />
     </div>
 </div>
 
 @code {
+
     protected override void OnInitialized()
     {
         var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
@@ -36,8 +39,13 @@
         {
             Navigation.NavigateTo("/chat", replace: true);
         }
+
+        PageService.Initialize();
     }
 
     private Task HandleSendAsync(string message)
         => PageService.SendMessageAsync(message);
+
+    private Task HandleClearAsync()
+        => PageService.ClearConversation();
 }

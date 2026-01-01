@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using crud_with_ai_ui.Models;
 using Microsoft.AspNetCore.Mvc;
+using crud_with_ai_ui.Models.Responses;
 
 namespace Core.Services;
 

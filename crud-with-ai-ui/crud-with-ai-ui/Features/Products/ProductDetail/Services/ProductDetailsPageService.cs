@@ -1,6 +1,6 @@
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using crud_with_ai_ui.Models;
+using crud_with_ai_ui.Models.Responses;
 
 namespace crud_with_ai_ui.Features.Products.ProductDetail.Services;
 
@@ -13,7 +13,7 @@ public sealed class ProductDetailsPageService
         _apiService = apiService;
     }
 
-    public Product? Product { get; private set; }
+    public ProductResponse? Product { get; private set; }
     public bool IsLoading { get; private set; }
     public ProblemDetails? Error { get; private set; }
 
