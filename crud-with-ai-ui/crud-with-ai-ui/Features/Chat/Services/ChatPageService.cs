@@ -8,6 +8,7 @@ public sealed class ChatPageService
 {
     private readonly ConversationsApiService _apiService;
     private readonly List<ChatMessage> _messages = new();
+    private string? _conversationId;
 
     public ChatPageService(ConversationsApiService apiService)
     {
@@ -29,9 +30,10 @@ public sealed class ChatPageService
         IsLoading = true;
         _messages.Add(new ChatMessage { Role = "user", Content = prompt });
 
-        var response = await _apiService.SendMessageAsync(new ChatPromptRequest { Prompt = prompt }, cancellationToken);
+        var response = await _apiService.SendMessageAsync(new ChatPromptRequest { Prompt = prompt, ConversationId = _conversationId }, cancellationToken);
         if (response.IsSuccess && response.Data is not null)
         {
+            _conversationId = response.Data.ConversationId;
             MergeMessages(response.Data.Messages);
         }
         else
@@ -49,11 +51,7 @@ public sealed class ChatPageService
             return;
         }
 
-        if (messages.Any(message => message.Role.Equals("user", StringComparison.OrdinalIgnoreCase)))
-        {
-            _messages.Clear();
-        }
-
+        _messages.Clear();
         foreach (var message in messages)
         {
             _messages.Add(new ChatMessage
