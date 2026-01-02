@@ -21,6 +21,7 @@ public sealed class ProductsPageService
 
     public async Task LoadAsync(CancellationToken cancellationToken = default)
     {
+        Products = Array.Empty<ProductResponse>();
         Error = null;
         IsLoading = true;
 
