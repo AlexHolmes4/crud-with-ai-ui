@@ -13,6 +13,7 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0" PrivateAssets="all" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
 	  <PackageReference Include="Blazored.Toast" Version="4.1.0" />
 	  <PackageReference Include="Markdig" Version="0.37.0" />
   </ItemGroup>

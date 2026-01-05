@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -20,60 +19,25 @@ public abstract class ApiServiceBase
 
     protected async Task<ApiResponse<T>> SendAsync<T>(Func<HttpRequestMessage> requestFactory, CancellationToken cancellationToken)
     {
-        const int maxAttempts = 3;
+        using var request = requestFactory();
+        using var response = await _httpClient.SendAsync(request, cancellationToken);
 
-        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+        if (response.IsSuccessStatusCode)
         {
-            try
+            var payload = await response.Content.ReadFromJsonAsync<T>(_jsonOptions, cancellationToken);
+            if (payload is null)
             {
-                using var request = requestFactory();
-                using var response = await _httpClient.SendAsync(request, cancellationToken);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var payload = await response.Content.ReadFromJsonAsync<T>(_jsonOptions, cancellationToken);
-                    if (payload is null)
-                    {
-                        return ApiResponse<T>.Failure(response.StatusCode, null, "Empty response payload.");
-                    }
-
-                    return ApiResponse<T>.Success(payload, response.StatusCode);
-                }
-
-                var problemDetails = await TryReadProblemDetailsAsync(response, cancellationToken);
-                var rawError = problemDetails is null ? await response.Content.ReadAsStringAsync(cancellationToken) : null;
-
-                if (IsTransient(response.StatusCode) && attempt < maxAttempts)
-                {
-                    _logger.LogWarning(
-                        "Transient error {StatusCode} on {RequestUri}. Attempt {Attempt} of {MaxAttempts}.",
-                        response.StatusCode,
-                        request.RequestUri,
-                        attempt,
-                        maxAttempts);
-                    await Task.Delay(TimeSpan.FromMilliseconds(200 * attempt), cancellationToken);
-                    continue;
-                }
-
-                return ApiResponse<T>.Failure(response.StatusCode, problemDetails, rawError);
+                return ApiResponse<T>.Failure(response.StatusCode, null, "Empty response payload.");
             }
-            catch (HttpRequestException ex) when (attempt < maxAttempts)
-            {
-                _logger.LogWarning(ex, "Request failed on attempt {Attempt} of {MaxAttempts}.", attempt, maxAttempts);
-                await Task.Delay(TimeSpan.FromMilliseconds(200 * attempt), cancellationToken);
-            }
+
+            return ApiResponse<T>.Success(payload, response.StatusCode);
         }
 
-        return ApiResponse<T>.Failure(HttpStatusCode.ServiceUnavailable, null, "Request failed after retries.");
-    }
+        var problemDetails = await TryReadProblemDetailsAsync(response, cancellationToken);
+        var rawError = problemDetails is null ? await response.Content.ReadAsStringAsync(cancellationToken) : null;
 
-    private static bool IsTransient(HttpStatusCode statusCode)
-        => statusCode is HttpStatusCode.RequestTimeout
-            or HttpStatusCode.TooManyRequests
-            or HttpStatusCode.InternalServerError
-            or HttpStatusCode.BadGateway
-            or HttpStatusCode.ServiceUnavailable
-            or HttpStatusCode.GatewayTimeout;
+        return ApiResponse<T>.Failure(response.StatusCode, problemDetails, rawError);
+    }
 
     private static async Task<ProblemDetails?> TryReadProblemDetailsAsync(HttpResponseMessage response, CancellationToken cancellationToken)
     {

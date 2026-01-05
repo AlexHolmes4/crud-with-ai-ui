@@ -8,7 +8,7 @@ public enum ProcessedActionType
 {
     None,
     FindProduct,
-    ListProducts,
+    ListProducts,//todo: add this to allow just the showing of the button to nav to product list
     CreateProduct,
     UpdateProduct,
     DeleteProduct

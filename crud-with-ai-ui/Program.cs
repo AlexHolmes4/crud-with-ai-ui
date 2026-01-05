@@ -21,13 +21,13 @@ builder.Services.AddHttpClient<ConversationsApiService>((sp, client) =>
 {
     var options = sp.GetRequiredService<IOptions<ApiClientOptions>>().Value;
     client.BaseAddress = new Uri(options.BaseUrl);
-});
+}).AddStandardResilienceHandler();
 
 builder.Services.AddHttpClient<ProductsApiService>((sp, client) =>
 {
     var options = sp.GetRequiredService<IOptions<ApiClientOptions>>().Value;
     client.BaseAddress = new Uri(options.BaseUrl);
-});
+}).AddStandardResilienceHandler();
 
 builder.Services.AddScoped<ChatPageService>();
 builder.Services.AddScoped<ProductsPageService>();
